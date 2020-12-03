@@ -1,0 +1,139 @@
+swagger: "2.0"
+info:
+  description: "This API provides with a mechanism to handle requests from the Urban Alliance on Race Relations Museum website"
+  version: "1.0.0"
+  title: "Urban Alliance on Race Relations Museum"
+paths:
+  /uarr/museum/incidents:
+    get:
+      tags:
+        - "incidents"
+      summary: "Find incidents by search criteria"
+      description: "Get incidents based on the search criteria. If no criteria is specified, all incidents will be returned."
+      produces:
+        - "application/json"
+      parameters:
+        - name: "bounds"
+          in: "query"
+          description: "The bounding box details of the map"
+          required: false
+          type: "array"
+          items:
+            type: "string"
+        - name: "dateFrom"
+          in: "query"
+          description: "The starting date of the search filter in the yyyymmdd format. If none provided, will use return incidents from the start."
+          required: false
+          type: "string"
+        - name: "dateTo"
+          in: "query"
+          description: "The end date of the search filter in the yyyymmdd format. If none provided, will use the current date by default."
+          required: false
+          type: "string"
+        - name: "system"
+          in: "query"
+          description: "The text to identify the system. "
+          required: false
+          type: "string"
+          enum:
+            - "Community"
+            - "Education"
+            - "Employment"
+            - "Fire Department"
+            - "Health Care"
+            - "Housing"
+            - "Law & Justice"
+            - "Police"
+            - "Politics"
+            - "Transportation"
+        - name: "incidentLevel"
+          in: "query"
+          description: "The text to identify the system."
+          required: false
+          type: "string"
+          enum:
+            - "Macro"
+            - "Mezzo"
+            - "Micro"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/IncidentContents"
+        "400":
+          description: "Bad Request"
+        "404":
+          description: "Incidents Not Found"
+        "500":
+          description: "Internal Server Error"
+definitions:
+  IncidentContents:
+    type: "object"
+    properties:
+      incidentContents:
+        description: An array with the incident data.
+        type: array
+        items:
+          $ref: '#/definitions/Incident'
+  Incident:
+    description: A suggestion can be clicked by the user in the widget to trigger the display of the next content.
+    required:
+      - suggestionText
+      - suggestionName
+    properties:
+      incidentLevel:
+        description: The incident level.
+        type: string
+        enum:
+          - "Macro"
+          - "Micro"
+          - "Mezzo"
+          - "N/A"
+      title:
+        description: The title of the incident.
+        type: string
+      date:
+        description: The date when the incident occurred.
+        type: string
+      province:
+        description: The province where the incident occurred.
+        type: string
+      location:
+        description: The location where the incident occurred.
+        type: string
+      longitude:
+        description: Longitude in the form of 43°37'51.5"N.
+        type: string
+      latitude:
+        description: Latitide in the form of 79°30'14.1"W.
+        type: string
+      system:
+        description: The system type.
+        type: string
+        enum:
+          - "Community"
+          - "Education"
+          - "Employment"
+          - "Fire Department"
+          - "Health Care"
+          - "Housing"
+          - "Law & Justice"
+          - "Police"
+          - "Politics"
+          - "Transportation"
+          - "N/A"
+      summary:
+        description: The summary of the incident.
+        type: string
+      notes:
+        description: Detailed notes on the incident.
+        type: string
+      incidentResponse:
+        description: The response to an incident.
+        type: string
+      policyAndPractices:
+        description: The polices and practices in/not use.
+        type: string
+      additionalLinks:
+        description: Additional links on the incident.
+        type: string
